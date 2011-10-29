@@ -1,21 +1,76 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<script type="text/javascript">
-
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<title>Peter Farmer - Systems Architect & Developer</title>
+<link rel="stylesheet" href="css/style.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<link href="http://fonts.googleapis.com/css?family=Ubuntu|Ubuntu:italic,bold" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script src="js/jquery.scrollTo-1.4.2-min.js" type="text/javascript"></script>
+<script src="js/jquery.localscroll-1.2.7-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/jquery.serialScroll-1.2.2-min.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/slider.min.js" type="text/javascript" charset="utf-8"></script>
+<!-- <script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-322710-18']);
   _gaq.push(['_trackPageview']);
-
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-
-</script>
+</script> -->
 </head>
 <body>
-<h1>My Projects</h1>
-<a href="/jquery-countdown/">jQuery-countdown</a>
+    <div id="wrapper">
+        <div id="maintitle">
+            <h1>Peter <span class="altcolor">Farmer</span></h1>
+            <h2 class="subtitle">Systems Architect & Developer</h2>
+        </div>
+        <div id="slider">    
+            <div id="main-navigation" class="dark">
+                <ul class="navigation">
+                    <li><a class="no-decoration" href="#about"><img class="no-decoration" src="img/user_24x24.png" alt="Home" /></a></li>
+                    <li><a class="no-decoration" href="#projects"><img class="no-decoration" src="img/document_fill_24x24.png" alt="Resume" /></a></li>
+                    <li><a class="no-decoration" href="#contact"><img class="no-decoration" src="img/mail_alt_24x24.png" alt="Projects" /></a></li>
+                </ul>
+            </div>
+            <div class="scroll">
+                <div class="scrollContainer">
+                <div class="panel" id="about">
+                    <div style="width: 640px; padding: 10px;">
+                        <h2>About Me</h2>
+                        <img src="img/profile.png" class="profile" />
+                        <p>My primary skill is as a <span class="bold">Linux SysAdmin</span>, I have worked with Linux in roles ranging from SysAdmin through to <span class="bold">Hosting Architect</span> (my current role). My current Linux flavour of choice is <span class="bold">Ubuntu</span>, although I have a lot of experience with <span class="bold">RedHat</span>.</p>
+						<p>In 2009 I started coding in <span class="bold">Python</span>, after 10 years of coding in <span class="bold">perl</span> I wanted a change. I also code <span class="bold">javascript</span>, frequently utilising the <span class="bold">jQuery</span> framework. I always use the <span class="bold">git</span> DVCS for any code I write.</p>
+						<p>I live in Kent, with my wife, Donna, and two our children, Joey, and Amy. Donna and I have been married since 2001, Joey was born in 2006 and Amy in 2008.</p>
+                    </div>
+                </div>
+                <div class="panel" id="projects">
+                    <div style="width: 640px; padding: 10px;">
+                        <h2>Projects</h2>
+                        <h3><a href="/jquery-countdown/" class="lightblue no-decoration">jquery-countdown</a></h3>
+						<h2>Contributions</h2>
+						<h3><a class="lightblue no-decoration" href="https://github.com/lucjon/Py-StackExchange/">Py-StackExchange</a></h3>
+						<p class="project"><a class="lightblue no-decoration" href="https://github.com/lucjon/Py-StackExchange/commit/04e89e781edd18807124a939635d220e4b48ceb8">Tiny bugfix 1</a></p>
+						<p class="project"><a class="lightblue no-decoration" href="https://github.com/lucjon/Py-StackExchange/commit/fdf0ba2d0ad2797030cac088d7c10773ec56c5df">Tiny bugfix 2</a></p>
+                    </div>
+                </div>
+                <div class="panel" id="contact">
+                    <div style="width: 640px; padding: 10px;">
+                        <h2>Contact Me</h2>
+							<p><img class="vmiddle" src="img/social/social-email.png" /> Email: <a class="lightblue no-decoration" href="mailto:pfarmer@gmail.com">pfarmer@gmail.com</a></p>
+							<p><img class="vmiddle" src="img/social/github.png" /> Github: <a class="lightblue no-decoration" href="https://github.com/pfarmer">https://github.com/pfarmer</a></p>
+							<p><img class="vmiddle" src="img/social/twitter.png" /> Twitter: <a class="lightblue no-decoration" href="http://twitter.com/pfarmer/">@pfarmer</a></p>
+							<p><img class="vmiddle" src="img/social/google-plus-16px.png" /> Google+: <a class="lightblue no-decoration" href="https://plus.google.com/105298497882444292883/posts?hl=en">https://plus.google.com/105298497882444292883/posts?hl=en</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <p><a class="no-decoration lightgrey" href="credits.txt">Credits</a></p>
+    </div>
 </body>
 </html>

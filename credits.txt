@@ -1,0 +1,3 @@
+Background: http://subtlepatterns.com/
+Icons: http://somerandomdude.com/work/iconic/
+Slider based on: http://jqueryfordesigners.com/coda-slider-effect/
