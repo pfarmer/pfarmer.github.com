@@ -1,0 +1,91 @@
+Django logging
+==============
+Date: **2012-01-15**
+
+.. note:: **2016-06-29** - I'll be writing an updated version of this post very soon.
+
+I frequently write small APIs using a python web framework called django, but when making test calls to the API with curl (or even urllib2) getting the massive DEBUG=True exception page back can be pain. So by using the logging framework you can set DEBUG to False and watch for your exceptions in a log. Here's how:
+
+1. Set DEBUG to False in your settings.py file:
+-----------------------------------------------
+
+.. code:: python
+
+    DEBUG=False
+
+
+2. Update the logging section in settings.py:
+---------------------------------------------
+
+.. code:: python
+
+    APPHOME="/home/pfarmer/projectname"
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': True,
+        'formatters': {
+            'standard': {
+                'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+            },
+        },
+        'handlers': {
+            'default': {
+                'level':'DEBUG',
+                'class':'logging.handlers.RotatingFileHandler',
+                'filename': '%s/logs/default.log' % APPHOME,
+                'maxBytes': 1024*1024*5, # 5 MB
+                'backupCount': 5,
+                'formatter':'standard',
+            },
+            'request_handler': {
+                    'level':'DEBUG',
+                    'class':'logging.handlers.RotatingFileHandler',
+                    'filename': '%s/logs/django_request.log' % APPHOME,
+                    'maxBytes': 1024*1024*5, # 5 MB
+                    'backupCount': 5,
+                    'formatter':'standard',
+            },
+        },
+        'loggers': {
+            '': {
+                'handlers': ['default'],
+                'level': 'DEBUG',
+                'propagate': True
+            },
+            'django.request': { # Stop SQL debug from logging to main logger
+                'handlers': ['request_handler'],
+                'level': 'DEBUG',
+                'propagate': False
+            },
+        }
+    }
+
+
+Now when some code causes an exception, the traceback should appear in <span class="bold">django_request.log</span>
+
+3. Make sure you have a 500.html template in place.
+---------------------------------------------------
+
+4. The added bonus....
+----------------------
+
+The added bonus is you can use the standard python logging module to log during view execution, add the following to each of your views.py:
+
+.. code:: python
+
+    import logging
+    log = logging.getLogger(__name__)
+
+
+5. Then use code like this to log messages:
+-------------------------------------------
+
+.. code:: python
+
+    log.debug("API login attempt for %s" request.GET['user'])
+
+
+This will appear in the log like this:::
+
+    2011-11-16 23:02:32,339 [DEBUG] api.views: API login attempt for pfarmer

@@ -1,0 +1,188 @@
+Starting a new python project
+=============================
+
+When I start a new python project (no matter how small) I use virtualenv (actually virtualenvwrapper) to ensure a clean enviroment, git for version control and generally Sublime Editor 2.
+
+1. Install virtualenv and virtualenvwrapper.
+--------------------------------------------
+
+.. code::
+
+    $ sudo apt-get install python-pip
+    $ sudo pip install virtualenvwrapper
+
+
+**virtualenvwrapper** adds a bunch of functionality to **virtualenv**, the following two commands are the most useful, and are covered in this guide.::
+
+    $ mkproject
+    $ workon
+
+
+1a. Setting up virtualenvwrapper.
+---------------------------------
+
+**virtualenvwrapper** requires two enviroment variables to be setup.::
+
+    $ export WORKON_HOME="/home/pfarmer/py"
+    $ export PROJECT_HOME="/home/pfarmer/projects"
+
+
+**WORKON_HOME** is the directory in which the virtual enviroments will be created, **PROJECT_HOME** is the directory in which your project folders will be created. It is advisable to put these variables in your profile.
+
+2. mkproject.
+-------------
+
+mkproject creates a virtual enviroment and a project folder, it then moves into the project and activates the virtual enviroment.::
+
+    $ mkproject testproject1
+    New python executable in testproject1/bin/python
+    Installing setuptools............done.
+    Installing pip...............done.
+    virtualenvwrapper.user_scripts creating /home/pfarmer/py/testproject1/bin/predeactivate
+    virtualenvwrapper.user_scripts creating /home/pfarmer/py/testproject1/bin/postdeactivate
+    virtualenvwrapper.user_scripts creating /home/pfarmer/py/testproject1/bin/preactivate
+    virtualenvwrapper.user_scripts creating /home/pfarmer/py/testproject1/bin/postactivate
+    virtualenvwrapper.user_scripts creating /home/pfarmer/py/testproject1/bin/get_env_details
+    Creating /home/pfarmer/projects/testproject1
+    Setting project for testproject1 to /home/pfarmer/projects/testproject1
+    (testproject1)$
+
+
+Notice that pip and setuptools are installed by default and your command prompt is modified to indicate the project you are currently working on.
+
+3. workon.
+----------
+
+workon activates an already created project and moves to the project folder.::
+
+    $ workon testproject1
+    (testproject1)$
+
+
+3a. deactivate.
+---------------
+
+When you have finished working on a project, you can use the "deactivate" command to turn off the virtual enviroment.::
+
+    (testproject1)$ deactivate
+    $
+
+
+4. Installing packages into the virtual enviroment with pip.
+------------------------------------------------------------
+
+So, we now have a project called **testproject1**, lets install some python packages into it. In this case we're going to install the web micro framework **flask**.::
+
+    (testproject1)$ pip install flask
+    Downloading/unpacking flask
+      Downloading Flask-0.8.tar.gz (494Kb): 494Kb downloaded
+      Running setup.py egg_info for package flask
+
+    SNIPPED LOTS OF OUTPUT!!
+
+    Successfully installed flask Werkzeug Jinja2
+    Cleaning up...
+
+
+Notice how **pip** actually installed three packages, **flask + Werkzeug and Jinja2**, Werkzeug and Jinja2 are dependancies for flask. Alternately you can add packages to a "requirements" file.::
+
+    (testproject1)$ echo flask >> requirements.txt
+    (testproject1)$ pip install -r requirements.txt
+    Downloading/unpacking flask
+      Downloading Flask-0.8.tar.gz (494Kb): 494Kb downloaded
+      Running setup.py egg_info for package flask
+
+    SNIPPED LOTS OF OUTPUT!!
+
+    Successfully installed flask Werkzeug Jinja2
+    Cleaning up...
+
+
+Using a requirements file makes you project much more portable, you can just zip up your project folder, take it anywhere, once unzipped in the new location you can run **pip install -r requirements** and you have every package you need.
+
+5\. Create a small application.
+-------------------------------
+
+.. code:: python
+
+    #!/usr/bin/env python
+    from flask import Flask
+    app = Flask(__name__)
+
+    @app.route("/")
+    def hello():
+        return "Hello World!"
+
+    if __name__ == "__main__":
+        app.run()
+
+
+Save this file as "app.py", now run "./app.py" and browse to http://localhost:5000/ to see your app in action.
+
+6. Using git.
+-------------
+
+I can't extol the importance of source control enough, even for small projects, the ability to roll back a change you have made to source code is invaluable! At the very least you should zip up your project before any change, so you can revert, but I think you'll find that using git to manage your source code is much better.
+
+7. Create the git repository.
+-----------------------------
+
+.. code::
+
+    (testproject1)$ cdproject
+    (testproject1)$ git init .
+    (testproject1)$ git add -A
+    (testproject1)$ git commit -m "initial commit"
+
+
+I keep my projects folder inside a Dropbox folder, this has several benefits for me:
+
+*   All my repositories are automatically backed up.
+*   My code stays in the sync between several computers.
+
+But you might find that a public repository on github is what you need, is which case do the following:::
+
+    (testproject1)$ git remote add origin git@github.com:USERNAME/REPONAME.git
+    (testproject1)$ git push -u origin master
+
+
+8. My git workflow.
+-------------------
+
+As most of my projects have just me working on them, I use a fairly simple workflow. Generally my repositories consist of two branches::
+
+    $ git branch
+    * dev
+      master
+
+
+**master** is the standard branch, and this is where my "stable" code lives. **dev** is where I generally work, once I'm happy with my code in *dev* I merge into *master*, which is generally a fast-forward merge.
+
+If I'm making major changes, then I will use a *feature* branch which is branched off *dev*. My commits might typically look like this:::
+
+    master     a -------- d ------------------- h -------------- m
+                \        /                     /                /
+    dev          b ---- c ---- e ---- f ---- g ---- i -------- l
+                                                     \        /
+    feature x                                         j ---- k
+
+
+In this example *a* is the initial commit, *b* and *c* are commits into the **dev** branch, *d* is the point at merge *b* and *c* merge back into **master**, *e*, *f* and *g* are commits in **dev**, *h* is the merge into **master**, *i* is a commit in **dev**, *j* and *k* are commits in branch **feature x** based off *i*, *l* is the merge of **feature x** into **dev** and *m* is the merge of *l* into master.
+
+But my commit history could look like this:::
+
+    master     a --------------------------- g ------------ l
+                \           \               /             /
+    dev          b ---- cx   d ---- e ---- f ---- j ---- k
+                                            \
+    feature x                                h ---- ix
+
+
+In this example, *b* and *cx* are commits made to **dev**, but at commit *cx* I abandoned the changes, commit *d* is a fresh dev branch from commit *a*, *h* and *ix* are commits to the "feature x" branched from commit *f* on **dev** being abandoned at commit *ix*.
+
+As you can see, using git like this gives me huge amounts of flexibility to write experimental code without worrying about being able to get back to a known good point in my code.
+
+9. Commit early, commit often.
+------------------------------
+
+Using this workflow you can commit often, making small incremental changes to you code, at the point at which you want to merge code back into your **dev** or **master** branches you can squash any number of commits, combining the changes and log messages, typically grouping squashed commits together based on the change they represent.

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Django logging (redux) &mdash; projectchilli.com</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/my-styles.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="top" title="projectchilli.com" href="../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          projectchilli.com</a>
+        <!-- <span class="navbar-text navbar-version pull-left"><b>0.4.9</b></span> -->
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Django logging (redux)</a><ul>
+<li><a class="reference internal" href="#set-debug-to-false-in-your-settings-py-file">1. Set DEBUG to False in your settings.py file:</a></li>
+<li><a class="reference internal" href="#update-the-logging-section-in-settings-py">2. Update the logging section in settings.py:</a><ul>
+<li><a class="reference internal" href="#formatters">formatters</a></li>
+<li><a class="reference internal" href="#handlers">handlers</a></li>
+<li><a class="reference internal" href="#loggers">loggers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#if-you-are-using-celery-in-the-application">3. If you are using celery in the application.</a></li>
+<li><a class="reference internal" href="#make-sure-you-have-a-500-html-template-in-place">4. Make sure you have a 500.html template in place.</a></li>
+<li><a class="reference internal" href="#the-added-bonus">5. The added bonus....</a></li>
+<li><a class="reference internal" href="#then-use-code-like-this-to-log-messages">6. Then use code like this to log messages:</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../_sources/articles/20160711-django-logging.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="django-logging-redux">
+<h1>Django logging (redux)</h1>
+<p><strong>Date</strong>: 2016-07-11 - <strong>Categories</strong>: <a class="reference external" href="/categories/django.html">django</a>, <a class="reference external" href="/categories/python.html">python</a></p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a rewrite of the blog post I wrote in 2012.</p>
+</div>
+<p>Having spent a number of years writing django web applications (a number of which are in production) I&#8217;ve learnt a few things about how to get good logging. So here is my current logging setup. I don&#8217;t claim to be an expert, but this setup works for me, and hopefully will work for you, or at least get you started.</p>
+<div class="section" id="set-debug-to-false-in-your-settings-py-file">
+<h2>1. Set DEBUG to False in your settings.py file:</h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">DEBUG</span><span class="o">=</span><span class="bp">False</span>
+</pre></div>
+</div>
+<p>This prevents the details exception data from being displayed on screen. To re-iterate what the django documentation website says: <strong>NEVER</strong> <a class="footnote-reference" href="#f1" id="id1">[1]</a> deploy a production site with <tt class="docutils literal"><span class="pre">DEBUG=True</span></tt>.</p>
+</div>
+<div class="section" id="update-the-logging-section-in-settings-py">
+<h2>2. Update the logging section in settings.py:</h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">LOGGING</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;disable_existing_loggers&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="s1">&#39;formatters&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;verbose&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1"> </span><span class="si">%(asctime)s</span><span class="s1"> </span><span class="si">%(module)s</span><span class="s1"> </span><span class="si">%(process)d</span><span class="s1"> </span><span class="si">%(thread)d</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;simple&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1"> </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;standard&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> [</span><span class="si">%(levelname)s</span><span class="s1">] </span><span class="si">%(name)s</span><span class="s1">:</span><span class="si">%(lineno)d</span><span class="s1">: </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;null&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.NullHandler&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;default_error&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;ERROR&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.handlers.RotatingFileHandler&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/logs/error.log&#39;</span> <span class="o">%</span> <span class="n">BASE_DIR</span><span class="p">,</span>
+            <span class="s1">&#39;maxBytes&#39;</span><span class="p">:</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">50</span><span class="p">,</span>  <span class="c1"># 50 MB</span>
+            <span class="s1">&#39;backupCount&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;default_info&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.handlers.RotatingFileHandler&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/logs/default.log&#39;</span> <span class="o">%</span> <span class="n">BASE_DIR</span><span class="p">,</span>
+            <span class="s1">&#39;maxBytes&#39;</span><span class="p">:</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">50</span><span class="p">,</span>  <span class="c1"># 50 MB</span>
+            <span class="s1">&#39;backupCount&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;default_debug&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.handlers.RotatingFileHandler&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/logs/default-debug.log&#39;</span> <span class="o">%</span> <span class="n">BASE_DIR</span><span class="p">,</span>
+            <span class="s1">&#39;maxBytes&#39;</span><span class="p">:</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">50</span><span class="p">,</span>  <span class="c1"># 50 MB</span>
+            <span class="s1">&#39;backupCount&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;console&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.StreamHandler&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;standard&#39;</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;request_handler&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.handlers.RotatingFileHandler&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/logs/django_request.log&#39;</span> <span class="o">%</span> <span class="n">BASE_DIR</span><span class="p">,</span>
+            <span class="s1">&#39;maxBytes&#39;</span><span class="p">:</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">50</span><span class="p">,</span>  <span class="c1"># 50 MB</span>
+            <span class="s1">&#39;backupCount&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;celery_handler&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.handlers.RotatingFileHandler&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/logs/celery.log&#39;</span> <span class="o">%</span> <span class="n">BASE_DIR</span><span class="p">,</span>
+            <span class="s1">&#39;maxBytes&#39;</span><span class="p">:</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">50</span><span class="p">,</span>  <span class="c1"># 50 MB</span>
+            <span class="s1">&#39;backupCount&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s1">&#39;formatter&#39;</span><span class="p">:</span> <span class="s1">&#39;standard&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;loggers&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;default_info&#39;</span><span class="p">,</span> <span class="s1">&#39;default_debug&#39;</span><span class="p">,</span> <span class="s1">&#39;default_error&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="bp">True</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;django.request&#39;</span><span class="p">:</span> <span class="p">{</span>  <span class="c1"># Stop SQL debug from logging to main logger</span>
+            <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;request_handler&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;requests.packages.urllib3.connectionpool&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;null&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;celery&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;celery_handler&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;DEBUG&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;propagate&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="formatters">
+<h3>formatters</h3>
+<p>The <tt class="docutils literal"><span class="pre">formatters</span></tt> define how the message should look when they are written, I have three examples in my config, <tt class="docutils literal"><span class="pre">verbose</span></tt>, <tt class="docutils literal"><span class="pre">simple</span></tt> and <tt class="docutils literal"><span class="pre">standard</span></tt>, the <tt class="docutils literal"><span class="pre">standard</span></tt> format is one used throughout the rest of the config and produces log entries which look like this::</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>2011-11-16 23:02:32,339 [DEBUG] api.views:125: API login attempt for pfarmer
+</pre></div>
+</div>
+</div>
+<div class="section" id="handlers">
+<h3>handlers</h3>
+<p>The <tt class="docutils literal"><span class="pre">handlers</span></tt> determine how and where the log message is displayed/written.</p>
+</div>
+<div class="section" id="loggers">
+<h3>loggers</h3>
+<p>The <tt class="docutils literal"><span class="pre">loggers</span></tt> provide the final plumbing between the <tt class="docutils literal"><span class="pre">formatters</span></tt>, <tt class="docutils literal"><span class="pre">handlers</span></tt> and the actual log messages.</p>
+<p>For more information on how logging works see the <a class="reference external" href="https://docs.python.org/2/library/logging.html">Python docs</a>.</p>
+<p>Now when some code causes an exception, the traceback should appear in <strong>error.log</strong> (and django_request.log).</p>
+</div>
+</div>
+<div class="section" id="if-you-are-using-celery-in-the-application">
+<h2>3. If you are using celery in the application.</h2>
+<p>Add this to the settings file:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="n">CELERYD_HIJACK_ROOT_LOGGER</span> <span class="o">=</span> <span class="bp">False</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="make-sure-you-have-a-500-html-template-in-place">
+<h2>4. Make sure you have a 500.html template in place.</h2>
+</div>
+<div class="section" id="the-added-bonus">
+<h2>5. The added bonus....</h2>
+<p>The added bonus is you can use the standard python logging module to log during view execution, add the following to each of your views.py:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="then-use-code-like-this-to-log-messages">
+<h2>6. Then use code like this to log messages:</h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span>log.debug(&quot;API login attempt for %s&quot; request.GET[&#39;user&#39;])
+</pre></div>
+</div>
+<p>This will appear in the log like this::</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>2011-11-16 23:02:32,339 [DEBUG] api.views: API login attempt for pfarmer
+</pre></div>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="https://docs.djangoproject.com/en/1.9/ref/settings/#debug">https://docs.djangoproject.com/en/1.9/ref/settings/#debug</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2011-2016, Peter Farmer.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.<br/>
+    </p>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-322710-20', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

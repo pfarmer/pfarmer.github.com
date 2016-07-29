@@ -1,0 +1,14 @@
+Blog Contents
+=============
+
+.. toctree::
+    :glob:
+    :maxdepth: 2
+
+    ./index.rst
+    ./2013/04/20/starting-a-new-python-project/index.rst
+    ./2013/09/18/changing-the-admin-password-in-openshift-origin/index.rst
+    ./2012/01/15/django-logging/index.rst
+    ./2012/02/01/using-facebook-comments-with-jekyll/index.rst
+    ./2012/03/01/unit-testing-patch-requests-with-django-test-client/index.rst
+

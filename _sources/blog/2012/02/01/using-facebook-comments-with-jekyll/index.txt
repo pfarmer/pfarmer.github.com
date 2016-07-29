@@ -1,0 +1,49 @@
+Using facebook comments with Jekyll
+===================================
+
+.. warning:: The details contained in this post are quite old and may not be correct anymore.
+
+I wanted to implement a comments on my blog, but as I don't use a blogging software like wordpress I needed to implement something which used an external comments system. I've used disqus in the past, but don't pa rticularly like the system, so having seen some major blogs use facebook's "Social Plugins" comments system I thought I'd give it go. So here is how I implemented it.
+
+1. Sign-up as a facebook developer:
+-----------------------------------
+
+Go to http://developer.facebook.com, sign in and create a new app for your website.
+
+2. Include the required javascript:
+-----------------------------------
+
+Depending on the layout of your site you need to include the facebook javascript sdk, you could conditionally include it (see 3.). Make sure to set **APPID** to the correct number.::
+
+    <body>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=APPID";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, "script", "facebook-jssdk"));</script>
+    
+
+3. Include the comments div in your post template:
+--------------------------------------------------
+
+Conditionally include the comments div in your post template, by conditionally including it, you can decide on a post by post basis whether you want to have comments.::
+
+    {{ "{% if page.comments " }}%} 
+    <hr/>
+    <h2>Comments</h2>
+    <div class="fb-comments" data-href="{{ "{{ site.url " }}}}{{ "{{ page.url " }}}}" data-num-posts="4" data-width="706"></div>
+    {{ "{% endif"}}%}
+    
+
+4. On each entry where you want comments add some YAML Front Matter.
+--------------------------------------------------------------------
+
+.. code:: yaml
+
+    comments: yes
+    
+
+For more information see: http://developers.facebook.com/docs/reference/plugins/comments/

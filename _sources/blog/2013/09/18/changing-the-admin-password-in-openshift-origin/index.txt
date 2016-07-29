@@ -1,0 +1,39 @@
+Changing the admin password in Openshift Origin
+===============================================
+
+.. warning:: This is a very old post, and it is likely that this method is not relevant any more
+
+I've just started playing with Openshift Origin, but found there were no instructions for changing the admin password, so after scratching the around on the Internet for a while I came across some instructions, these got me most of the way to changing the password, but the database structure outlined in post was an old structure and didn't change the password.
+
+Here is a corrected version; there are a number of steps to follow:
+
+1. Get the salt from broker.conf file.
+--------------------------------------
+
+.. code::
+
+    $ grep 'AUTH_SALT' /etc/openshift/broker.conf
+    AUTH_SALT=the_salt
+    
+
+2. Generate the new hash for you password, using the value of "AUTH_SALT".
+--------------------------------------------------------------------------
+
+.. code:: ruby
+
+    $ irb 
+    irb(main):001:0> require 'digest/md5'
+    => true
+    irb(main):002:0> Digest::MD5.hexdigest(Digest::MD5.hexdigest("YOURPASSWORD") + "the_salt")
+    => "8662bb04dd08f370d8e3022a265ad57a"
+    
+
+3. Update the password in the mongo database.
+---------------------------------------------
+
+.. code:: 
+
+    $ mongo -u openshift -p mooo openshift_broker_dev --eval \
+    'db.auth_user.update({"_id":"admin"}, {"_id":"admin", "user":"admin", "password_hash":"8662bb04dd08f370d8e3022a265ad57a"}, true)
+    
+

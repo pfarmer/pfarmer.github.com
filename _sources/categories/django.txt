@@ -1,0 +1,10 @@
+Category: Python
+================
+
+* **2012-03-01** - `Unit testing patch requests with the django test client`_
+* **2012-01-15** - `Django logging`_
+
+.. _Unit testing patch requests with the django test client: /blog/2012/03/01/unit-testing-patch-requests-with-django-test-client/
+.. _Django logging: /blog/2012/01/15/django-logging/
+
+

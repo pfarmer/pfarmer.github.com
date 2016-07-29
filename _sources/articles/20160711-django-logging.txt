@@ -1,0 +1,179 @@
+Django logging (redux)
+======================
+**Date**: 2016-07-11 - **Categories**: `django`_, `python`_
+
+.. _django: /categories/django.html
+.. _python: /categories/python.html
+
+.. note:: This is a rewrite of the blog post I wrote in 2012.
+
+Having spent a number of years writing django web applications (a number of which are in production) I've learnt a few things about how to get good logging. So here is my current logging setup. I don't claim to be an expert, but this setup works for me, and hopefully will work for you, or at least get you started.
+
+
+1. Set DEBUG to False in your settings.py file:
+-----------------------------------------------
+
+.. code:: python
+
+    DEBUG=False
+
+This prevents the details exception data from being displayed on screen. To re-iterate what the django documentation website says: **NEVER** [#f1]_ deploy a production site with ``DEBUG=True``.
+
+
+2. Update the logging section in settings.py:
+---------------------------------------------
+
+.. code:: python
+
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            },
+            'simple': {
+                'format': '%(levelname)s %(message)s'
+            },
+            'standard': {
+                'format': '%(asctime)s [%(levelname)s] %(name)s:%(lineno)d: %(message)s'
+            },
+        },
+        'handlers': {
+            'null': {
+                'level': 'DEBUG',
+                'class': 'logging.NullHandler',
+            },
+            'default_error': {
+                'level': 'ERROR',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': '%s/logs/error.log' % BASE_DIR,
+                'maxBytes': 1024 * 1024 * 50,  # 50 MB
+                'backupCount': 5,
+                'formatter': 'standard',
+            },
+            'default_info': {
+                'level': 'INFO',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': '%s/logs/default.log' % BASE_DIR,
+                'maxBytes': 1024 * 1024 * 50,  # 50 MB
+                'backupCount': 5,
+                'formatter': 'standard',
+            },
+            'default_debug': {
+                'level': 'DEBUG',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': '%s/logs/default-debug.log' % BASE_DIR,
+                'maxBytes': 1024 * 1024 * 50,  # 50 MB
+                'backupCount': 5,
+                'formatter': 'standard',
+            },
+            'console': {
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard'
+            },
+            'request_handler': {
+                'level': 'DEBUG',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': '%s/logs/django_request.log' % BASE_DIR,
+                'maxBytes': 1024 * 1024 * 50,  # 50 MB
+                'backupCount': 5,
+                'formatter': 'standard',
+            },
+            'celery_handler': {
+                'level': 'DEBUG',
+                'class': 'logging.handlers.RotatingFileHandler',
+                'filename': '%s/logs/celery.log' % BASE_DIR,
+                'maxBytes': 1024 * 1024 * 50,  # 50 MB
+                'backupCount': 5,
+                'formatter': 'standard',
+            },
+        },
+        'loggers': {
+            '': {
+                'handlers': ['default_info', 'default_debug', 'default_error'],
+                'level': 'DEBUG',
+                'propagate': True
+            },
+            'django.request': {  # Stop SQL debug from logging to main logger
+                'handlers': ['request_handler'],
+                'level': 'DEBUG',
+                'propagate': True,
+            },
+            'requests.packages.urllib3.connectionpool': {
+                'handlers': ['null'],
+                'level': 'DEBUG',
+                'propagate': True,
+            },
+            'celery': {
+                'handlers': ['celery_handler'],
+                'level': 'DEBUG',
+                'propagate': True,
+            },
+        }
+    }
+
+
+formatters
+^^^^^^^^^^
+
+The ``formatters`` define how the message should look when they are written, I have three examples in my config, ``verbose``, ``simple`` and ``standard``, the ``standard`` format is one used throughout the rest of the config and produces log entries which look like this:::
+
+    2011-11-16 23:02:32,339 [DEBUG] api.views:125: API login attempt for pfarmer
+
+handlers
+^^^^^^^^
+
+The ``handlers`` determine how and where the log message is displayed/written.
+
+loggers
+^^^^^^^
+
+The ``loggers`` provide the final plumbing between the ``formatters``, ``handlers`` and the actual log messages.
+
+For more information on how logging works see the `Python docs`_.
+
+.. _Python docs: https://docs.python.org/2/library/logging.html
+
+Now when some code causes an exception, the traceback should appear in **error.log** (and django_request.log).
+
+3. If you are using celery in the application.
+----------------------------------------------
+
+Add this to the settings file:
+
+.. code:: python
+
+    CELERYD_HIJACK_ROOT_LOGGER = False
+
+4. Make sure you have a 500.html template in place.
+---------------------------------------------------
+
+5. The added bonus....
+----------------------
+
+The added bonus is you can use the standard python logging module to log during view execution, add the following to each of your views.py:
+
+.. code:: python
+
+    import logging
+    log = logging.getLogger(__name__)
+
+
+6. Then use code like this to log messages:
+-------------------------------------------
+
+.. code:: python
+
+    log.debug("API login attempt for %s" request.GET['user'])
+
+
+This will appear in the log like this:::
+
+    2011-11-16 23:02:32,339 [DEBUG] api.views: API login attempt for pfarmer
+
+
+.. rubric:: Footnotes
+
+.. [#f1] https://docs.djangoproject.com/en/1.9/ref/settings/#debug

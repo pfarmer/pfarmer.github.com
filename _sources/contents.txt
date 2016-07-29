@@ -1,0 +1,12 @@
+Site Contents
+=============
+
+.. toctree::
+    :glob:
+    :maxdepth: 2
+
+    ./*
+    ./articles/index.rst
+    ./blog/blog_contents.rst
+    ./drafts/index.rst
+

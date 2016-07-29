@@ -1,0 +1,18 @@
+Blog Posts
+==========
+
+Recent Blog Posts
+-----------------
+
+* **2013-09-18** - `Changing the admin password in Openshift Origin`_
+* **2013-03-20** - `Starting a new python project`_
+* **2012-03-01** - `Unit testing patch requests with the django test client`_
+* **2012-02-01** - `Using facebook comments with Jekyll`_
+* **2012-01-15** - `Django logging`_
+
+.. _Changing the admin password in Openshift Origin: /blog/2013/09/18/changing-the-admin-password-in-openshift-origin/
+.. _Starting a new python project: /blog/2013/04/20/starting-a-new-python-project/
+.. _Unit testing patch requests with the django test client: /blog/2012/03/01/unit-testing-patch-requests-with-django-test-client/
+.. _Using facebook comments with Jekyll: /blog/2012/02/01/using-facebook-comments-with-jekyll/
+.. _Django logging: /blog/2012/01/15/django-logging/
+

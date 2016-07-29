@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Starting a new python project &mdash; projectchilli.com</title>
+    
+    <link rel="stylesheet" href="../../../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/my-styles.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../',
+        VERSION:     '0.4.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="../../../../../about.html" />
+    <link rel="top" title="projectchilli.com" href="../../../../../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../../../index.html">
+          projectchilli.com</a>
+        <!-- <span class="navbar-text navbar-version pull-left"><b>0.4.9</b></span> -->
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Starting a new python project</a><ul>
+<li><a class="reference internal" href="#install-virtualenv-and-virtualenvwrapper">1. Install virtualenv and virtualenvwrapper.</a></li>
+<li><a class="reference internal" href="#a-setting-up-virtualenvwrapper">1a. Setting up virtualenvwrapper.</a></li>
+<li><a class="reference internal" href="#mkproject">2. mkproject.</a></li>
+<li><a class="reference internal" href="#workon">3. workon.</a></li>
+<li><a class="reference internal" href="#a-deactivate">3a. deactivate.</a></li>
+<li><a class="reference internal" href="#installing-packages-into-the-virtual-enviroment-with-pip">4. Installing packages into the virtual enviroment with pip.</a></li>
+<li><a class="reference internal" href="#create-a-small-application">5. Create a small application.</a></li>
+<li><a class="reference internal" href="#using-git">6. Using git.</a></li>
+<li><a class="reference internal" href="#create-the-git-repository">7. Create the git repository.</a></li>
+<li><a class="reference internal" href="#my-git-workflow">8. My git workflow.</a></li>
+<li><a class="reference internal" href="#commit-early-commit-often">9. Commit early, commit often.</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../../../../../_sources/blog/2013/04/20/starting-a-new-python-project/index.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="starting-a-new-python-project">
+<h1>Starting a new python project</h1>
+<p>When I start a new python project (no matter how small) I use virtualenv (actually virtualenvwrapper) to ensure a clean enviroment, git for version control and generally Sublime Editor 2.</p>
+<div class="section" id="install-virtualenv-and-virtualenvwrapper">
+<h2>1. Install virtualenv and virtualenvwrapper.</h2>
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ sudo apt-get install python-pip
+$ sudo pip install virtualenvwrapper
+</pre></div>
+</div>
+<p><strong>virtualenvwrapper</strong> adds a bunch of functionality to <strong>virtualenv</strong>, the following two commands are the most useful, and are covered in this guide.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ mkproject
+$ workon
+</pre></div>
+</div>
+</div>
+<div class="section" id="a-setting-up-virtualenvwrapper">
+<h2>1a. Setting up virtualenvwrapper.</h2>
+<p><strong>virtualenvwrapper</strong> requires two enviroment variables to be setup.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ export WORKON_HOME=&quot;/home/pfarmer/py&quot;
+$ export PROJECT_HOME=&quot;/home/pfarmer/projects&quot;
+</pre></div>
+</div>
+<p><strong>WORKON_HOME</strong> is the directory in which the virtual enviroments will be created, <strong>PROJECT_HOME</strong> is the directory in which your project folders will be created. It is advisable to put these variables in your profile.</p>
+</div>
+<div class="section" id="mkproject">
+<h2>2. mkproject.</h2>
+<p>mkproject creates a virtual enviroment and a project folder, it then moves into the project and activates the virtual enviroment.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ mkproject testproject1
+New python executable in testproject1/bin/python
+Installing setuptools............done.
+Installing pip...............done.
+virtualenvwrapper.user_scripts creating /home/pfarmer/py/testproject1/bin/predeactivate
+virtualenvwrapper.user_scripts creating /home/pfarmer/py/testproject1/bin/postdeactivate
+virtualenvwrapper.user_scripts creating /home/pfarmer/py/testproject1/bin/preactivate
+virtualenvwrapper.user_scripts creating /home/pfarmer/py/testproject1/bin/postactivate
+virtualenvwrapper.user_scripts creating /home/pfarmer/py/testproject1/bin/get_env_details
+Creating /home/pfarmer/projects/testproject1
+Setting project for testproject1 to /home/pfarmer/projects/testproject1
+(testproject1)$
+</pre></div>
+</div>
+<p>Notice that pip and setuptools are installed by default and your command prompt is modified to indicate the project you are currently working on.</p>
+</div>
+<div class="section" id="workon">
+<h2>3. workon.</h2>
+<p>workon activates an already created project and moves to the project folder.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ workon testproject1
+(testproject1)$
+</pre></div>
+</div>
+</div>
+<div class="section" id="a-deactivate">
+<h2>3a. deactivate.</h2>
+<p>When you have finished working on a project, you can use the &#8220;deactivate&#8221; command to turn off the virtual enviroment.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>(testproject1)$ deactivate
+$
+</pre></div>
+</div>
+</div>
+<div class="section" id="installing-packages-into-the-virtual-enviroment-with-pip">
+<h2>4. Installing packages into the virtual enviroment with pip.</h2>
+<p>So, we now have a project called <strong>testproject1</strong>, lets install some python packages into it. In this case we&#8217;re going to install the web micro framework <strong>flask</strong>.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>(testproject1)$ pip install flask
+Downloading/unpacking flask
+  Downloading Flask-0.8.tar.gz (494Kb): 494Kb downloaded
+  Running setup.py egg_info for package flask
+
+SNIPPED LOTS OF OUTPUT!!
+
+Successfully installed flask Werkzeug Jinja2
+Cleaning up...
+</pre></div>
+</div>
+<p>Notice how <strong>pip</strong> actually installed three packages, <strong>flask + Werkzeug and Jinja2</strong>, Werkzeug and Jinja2 are dependancies for flask. Alternately you can add packages to a &#8220;requirements&#8221; file.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>(testproject1)$ echo flask &gt;&gt; requirements.txt
+(testproject1)$ pip install -r requirements.txt
+Downloading/unpacking flask
+  Downloading Flask-0.8.tar.gz (494Kb): 494Kb downloaded
+  Running setup.py egg_info for package flask
+
+SNIPPED LOTS OF OUTPUT!!
+
+Successfully installed flask Werkzeug Jinja2
+Cleaning up...
+</pre></div>
+</div>
+<p>Using a requirements file makes you project much more portable, you can just zip up your project folder, take it anywhere, once unzipped in the new location you can run <strong>pip install -r requirements</strong> and you have every package you need.</p>
+</div>
+<div class="section" id="create-a-small-application">
+<h2>5. Create a small application.</h2>
+<div class="code python highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="nd">@app.route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;Hello World!&quot;</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Save this file as &#8220;app.py&#8221;, now run &#8221;./app.py&#8221; and browse to <a class="reference external" href="http://localhost:5000/">http://localhost:5000/</a> to see your app in action.</p>
+</div>
+<div class="section" id="using-git">
+<h2>6. Using git.</h2>
+<p>I can&#8217;t extol the importance of source control enough, even for small projects, the ability to roll back a change you have made to source code is invaluable! At the very least you should zip up your project before any change, so you can revert, but I think you&#8217;ll find that using git to manage your source code is much better.</p>
+</div>
+<div class="section" id="create-the-git-repository">
+<h2>7. Create the git repository.</h2>
+<div class="code highlight-python"><div class="highlight"><pre><span></span>(testproject1)$ cdproject
+(testproject1)$ git init .
+(testproject1)$ git add -A
+(testproject1)$ git commit -m &quot;initial commit&quot;
+</pre></div>
+</div>
+<p>I keep my projects folder inside a Dropbox folder, this has several benefits for me:</p>
+<ul class="simple">
+<li>All my repositories are automatically backed up.</li>
+<li>My code stays in the sync between several computers.</li>
+</ul>
+<p>But you might find that a public repository on github is what you need, is which case do the following::</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>(testproject1)$ git remote add origin git@github.com:USERNAME/REPONAME.git
+(testproject1)$ git push -u origin master
+</pre></div>
+</div>
+</div>
+<div class="section" id="my-git-workflow">
+<h2>8. My git workflow.</h2>
+<p>As most of my projects have just me working on them, I use a fairly simple workflow. Generally my repositories consist of two branches:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ git branch
+* dev
+  master
+</pre></div>
+</div>
+<p><strong>master</strong> is the standard branch, and this is where my &#8220;stable&#8221; code lives. <strong>dev</strong> is where I generally work, once I&#8217;m happy with my code in <em>dev</em> I merge into <em>master</em>, which is generally a fast-forward merge.</p>
+<p>If I&#8217;m making major changes, then I will use a <em>feature</em> branch which is branched off <em>dev</em>. My commits might typically look like this::</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>master     a -------- d ------------------- h -------------- m
+            \        /                     /                /
+dev          b ---- c ---- e ---- f ---- g ---- i -------- l
+                                                 \        /
+feature x                                         j ---- k
+</pre></div>
+</div>
+<p>In this example <em>a</em> is the initial commit, <em>b</em> and <em>c</em> are commits into the <strong>dev</strong> branch, <em>d</em> is the point at merge <em>b</em> and <em>c</em> merge back into <strong>master</strong>, <em>e</em>, <em>f</em> and <em>g</em> are commits in <strong>dev</strong>, <em>h</em> is the merge into <strong>master</strong>, <em>i</em> is a commit in <strong>dev</strong>, <em>j</em> and <em>k</em> are commits in branch <strong>feature x</strong> based off <em>i</em>, <em>l</em> is the merge of <strong>feature x</strong> into <strong>dev</strong> and <em>m</em> is the merge of <em>l</em> into master.</p>
+<p>But my commit history could look like this::</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>master     a --------------------------- g ------------ l
+            \           \               /             /
+dev          b ---- cx   d ---- e ---- f ---- j ---- k
+                                        \
+feature x                                h ---- ix
+</pre></div>
+</div>
+<p>In this example, <em>b</em> and <em>cx</em> are commits made to <strong>dev</strong>, but at commit <em>cx</em> I abandoned the changes, commit <em>d</em> is a fresh dev branch from commit <em>a</em>, <em>h</em> and <em>ix</em> are commits to the &#8220;feature x&#8221; branched from commit <em>f</em> on <strong>dev</strong> being abandoned at commit <em>ix</em>.</p>
+<p>As you can see, using git like this gives me huge amounts of flexibility to write experimental code without worrying about being able to get back to a known good point in my code.</p>
+</div>
+<div class="section" id="commit-early-commit-often">
+<h2>9. Commit early, commit often.</h2>
+<p>Using this workflow you can commit often, making small incremental changes to you code, at the point at which you want to merge code back into your <strong>dev</strong> or <strong>master</strong> branches you can squash any number of commits, combining the changes and log messages, typically grouping squashed commits together based on the change they represent.</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2011-2016, Peter Farmer.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.<br/>
+    </p>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-322710-20', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

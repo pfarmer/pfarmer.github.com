@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Changing the admin password in Openshift Origin &mdash; projectchilli.com</title>
+    
+    <link rel="stylesheet" href="../../../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/my-styles.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../',
+        VERSION:     '0.4.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="../../../../../about.html" />
+    <link rel="top" title="projectchilli.com" href="../../../../../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../../../index.html">
+          projectchilli.com</a>
+        <!-- <span class="navbar-text navbar-version pull-left"><b>0.4.9</b></span> -->
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Changing the admin password in Openshift Origin</a><ul>
+<li><a class="reference internal" href="#get-the-salt-from-broker-conf-file">1. Get the salt from broker.conf file.</a></li>
+<li><a class="reference internal" href="#generate-the-new-hash-for-you-password-using-the-value-of-auth-salt">2. Generate the new hash for you password, using the value of &#8220;AUTH_SALT&#8221;.</a></li>
+<li><a class="reference internal" href="#update-the-password-in-the-mongo-database">3. Update the password in the mongo database.</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../../../../../_sources/blog/2013/09/18/changing-the-admin-password-in-openshift-origin/index.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="changing-the-admin-password-in-openshift-origin">
+<h1>Changing the admin password in Openshift Origin</h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This is a very old post, and it is likely that this method is not relevant any more</p>
+</div>
+<p>I&#8217;ve just started playing with Openshift Origin, but found there were no instructions for changing the admin password, so after scratching the around on the Internet for a while I came across some instructions, these got me most of the way to changing the password, but the database structure outlined in post was an old structure and didn&#8217;t change the password.</p>
+<p>Here is a corrected version; there are a number of steps to follow:</p>
+<div class="section" id="get-the-salt-from-broker-conf-file">
+<h2>1. Get the salt from broker.conf file.</h2>
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ grep &#39;AUTH_SALT&#39; /etc/openshift/broker.conf
+AUTH_SALT=the_salt
+</pre></div>
+</div>
+</div>
+<div class="section" id="generate-the-new-hash-for-you-password-using-the-value-of-auth-salt">
+<h2>2. Generate the new hash for you password, using the value of &#8220;AUTH_SALT&#8221;.</h2>
+<div class="code ruby highlight-python"><div class="highlight"><pre><span></span>$ irb
+irb(main):001:0&gt; require &#39;digest/md5&#39;
+=&gt; true
+irb(main):002:0&gt; Digest::MD5.hexdigest(Digest::MD5.hexdigest(&quot;YOURPASSWORD&quot;) + &quot;the_salt&quot;)
+=&gt; &quot;8662bb04dd08f370d8e3022a265ad57a&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="update-the-password-in-the-mongo-database">
+<h2>3. Update the password in the mongo database.</h2>
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ mongo -u openshift -p mooo openshift_broker_dev --eval \
+&#39;db.auth_user.update({&quot;_id&quot;:&quot;admin&quot;}, {&quot;_id&quot;:&quot;admin&quot;, &quot;user&quot;:&quot;admin&quot;, &quot;password_hash&quot;:&quot;8662bb04dd08f370d8e3022a265ad57a&quot;}, true)
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2011-2016, Peter Farmer.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.<br/>
+    </p>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-322710-20', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

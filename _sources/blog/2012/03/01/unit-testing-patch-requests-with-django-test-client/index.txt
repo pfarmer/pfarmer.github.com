@@ -1,0 +1,49 @@
+Unit testing patch requests with django's test client
+=====================================================
+
+.. note:: My original patch and idea was used to add PATCH to the test client, you can now test http PATCH calls with the standard django testing client. [#f1]_ [#f2]_
+
+Whilst developing with Django and Tastypie I discovered that the Django test client doesn't contain a method for testing PATCH requests, I have submitted patches to the Django project to correct this, but until those patches get accepted I need a way to test PATCH, so I extend the Client class in my tests.py file:
+
+.. code:: python
+
+    from django.test.client import Client, FakePayload, MULTIPART_CONTENT from urlparse import urlparse, urlsplit
+
+    class Client2(Client):
+        """
+        Construct a second test client which can do PATCH requests.
+        """
+        def patch(self, path, data={}, content_type=MULTIPART_CONTENT, **extra): 
+            """ Construct a PATCH request. """
+            patch_data = self._encode_data(data, content_type)
+            parsed = urlparse(path)
+            r = {
+                'CONTENT_LENGTH': len(patch_data),
+                'CONTENT_TYPE':   content_type,
+                'PATH_INFO':      self._get_path(parsed),
+                'QUERY_STRING':   parsed[4],
+                'REQUEST_METHOD': 'PATCH',
+                'wsgi.input':     FakePayload(patch_data),
+            }
+            r.update(extra)
+            return self.request(**r)
+
+I can then do the following:
+
+.. code:: python
+
+    class testpatch(TestCase):
+        def setUp(self):
+            self.client = Client2()
+
+        def test_patch(self):
+            response = self.client.patch(
+                path='/api/v1/enterprisepod/1/',
+                data='{"gateway": "10.10.0.1/24"}',
+                content_type='application/json',
+                **{'HTTP_AUTHORIZATION': APIKEY}
+            )
+
+
+.. [#f1] https://code.djangoproject.com/ticket/17797
+.. [#f2] https://github.com/django/django/commit/293f7a21147ad94c92c7d5b3f33cbab2f87b001b

@@ -1,0 +1,6 @@
+Title Goes Here
+===============
+**Date**: 2016-xx-xx - **Categories**: `draft`_
+
+.. _draft: /categories/draft.html
+

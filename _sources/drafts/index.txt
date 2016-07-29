@@ -1,0 +1,8 @@
+Draft posts
+===========
+
+.. toctree::
+   :glob:
+   :maxdepth: 2
+
+   ./* 

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Using facebook comments with Jekyll &mdash; projectchilli.com</title>
+    
+    <link rel="stylesheet" href="../../../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/my-styles.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../../',
+        VERSION:     '0.4.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="author" title="About these documents" href="../../../../../about.html" />
+    <link rel="top" title="projectchilli.com" href="../../../../../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../../../index.html">
+          projectchilli.com</a>
+        <!-- <span class="navbar-text navbar-version pull-left"><b>0.4.9</b></span> -->
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Using facebook comments with Jekyll</a><ul>
+<li><a class="reference internal" href="#sign-up-as-a-facebook-developer">1. Sign-up as a facebook developer:</a></li>
+<li><a class="reference internal" href="#include-the-required-javascript">2. Include the required javascript:</a></li>
+<li><a class="reference internal" href="#include-the-comments-div-in-your-post-template">3. Include the comments div in your post template:</a></li>
+<li><a class="reference internal" href="#on-each-entry-where-you-want-comments-add-some-yaml-front-matter">4. On each entry where you want comments add some YAML Front Matter.</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../../../../../_sources/blog/2012/02/01/using-facebook-comments-with-jekyll/index.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="using-facebook-comments-with-jekyll">
+<h1>Using facebook comments with Jekyll</h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The details contained in this post are quite old and may not be correct anymore.</p>
+</div>
+<p>I wanted to implement a comments on my blog, but as I don&#8217;t use a blogging software like wordpress I needed to implement something which used an external comments system. I&#8217;ve used disqus in the past, but don&#8217;t pa rticularly like the system, so having seen some major blogs use facebook&#8217;s &#8220;Social Plugins&#8221; comments system I thought I&#8217;d give it go. So here is how I implemented it.</p>
+<div class="section" id="sign-up-as-a-facebook-developer">
+<h2>1. Sign-up as a facebook developer:</h2>
+<p>Go to <a class="reference external" href="http://developer.facebook.com">http://developer.facebook.com</a>, sign in and create a new app for your website.</p>
+</div>
+<div class="section" id="include-the-required-javascript">
+<h2>2. Include the required javascript:</h2>
+<p>Depending on the layout of your site you need to include the facebook javascript sdk, you could conditionally include it (see 3.). Make sure to set <strong>APPID</strong> to the correct number.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;body&gt;
+&lt;div id=&quot;fb-root&quot;&gt;&lt;/div&gt;
+&lt;script&gt;(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = &quot;//connect.facebook.net/en_GB/all.js#xfbml=1&amp;appId=APPID&quot;;
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, &quot;script&quot;, &quot;facebook-jssdk&quot;));&lt;/script&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="include-the-comments-div-in-your-post-template">
+<h2>3. Include the comments div in your post template:</h2>
+<p>Conditionally include the comments div in your post template, by conditionally including it, you can decide on a post by post basis whether you want to have comments.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>{{ &quot;{% if page.comments &quot; }}%}
+&lt;hr/&gt;
+&lt;h2&gt;Comments&lt;/h2&gt;
+&lt;div class=&quot;fb-comments&quot; data-href=&quot;{{ &quot;{{ site.url &quot; }}}}{{ &quot;{{ page.url &quot; }}}}&quot; data-num-posts=&quot;4&quot; data-width=&quot;706&quot;&gt;&lt;/div&gt;
+{{ &quot;{% endif&quot;}}%}
+</pre></div>
+</div>
+</div>
+<div class="section" id="on-each-entry-where-you-want-comments-add-some-yaml-front-matter">
+<h2>4. On each entry where you want comments add some YAML Front Matter.</h2>
+<div class="code yaml highlight-python"><div class="highlight"><pre><span></span>comments: yes
+</pre></div>
+</div>
+<p>For more information see: <a class="reference external" href="http://developers.facebook.com/docs/reference/plugins/comments/">http://developers.facebook.com/docs/reference/plugins/comments/</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2011-2016, Peter Farmer.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.<br/>
+    </p>
+  </div>
+</footer>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-322710-20', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

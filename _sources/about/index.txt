@@ -1,0 +1,14 @@
+About
+=====
+
+.. class: profile
+.. image:: _static/images/profile.jpg
+   :align: right
+
+I live in Kent with my wife and two children, I’ve been working in IT since I was 20 and in ISPs since 21. The “behind the scenes” part of the Internet is my passion, ranging from the physical hardware, virtualisation and networking, right through to the software stacks that make websites work the way they do.
+
+I enjoy making use of all manner of techologies, but to name a few, Ansible, git, Linux (ubuntu), CloudStack, gitlab, Python, django, javascript, jquery, flask, celery, nginx, InfluxDB, Grafana, Redis. I really enjoy coding web services, and making useful APIs.
+
+I also love to tinker with electronics, and currently have the following microcontrollers, which I tinker with: Arduino Uno, Arduino Nano, Teensy 3.0, atmega32u4, Spark Core.
+
+I can be contacted at pfarmer @ gmail.com.

@@ -1,0 +1,23 @@
+Playground
+==========
+
+Header 1
+--------
+
+Header 2
+^^^^^^^^
+
+Header 3
+""""""""
+
+I like my code to adhere to :index:`python` coding standards, so I use :pep:`8`
+
+.. index:: python
+
+
+Lorem ipsum [#f1]_ dolor sit amet ... [#f2]_
+
+.. rubric:: Footnotes
+
+.. [#f1] Text of the first footnote.
+.. [#f2] Text of the second footnote.
